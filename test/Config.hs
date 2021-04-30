@@ -31,7 +31,9 @@ makeTestServerConfig = do
     let credentials = Credentials [cred]
     return testServerConfig {
         scCredentials = credentials
+      , scQLog = Just "tmp/qlog/"
       , scALPN = Just chooseALPN
+      , scDebugLog = Just "tmp/qlog/"
       }
 
 testServerConfig :: ServerConfig
@@ -45,18 +47,23 @@ makeTestServerConfigR = do
     let credentials = Credentials [cred]
     return testServerConfigR {
         scCredentials = credentials
+      , scQLog = Just "tmp/qlog/"
       , scALPN = Just chooseALPN
+      , scDebugLog = Just "tmp/qlog/"
       }
 
 testServerConfigR :: ServerConfig
 testServerConfigR = defaultServerConfig {
     scAddresses = [("127.0.0.1",8003)]
+  , scDebugLog = Just "tmp/qlog/"
   }
 
 testClientConfig :: ClientConfig
 testClientConfig = defaultClientConfig {
     ccPortName = "8003"
   , ccValidate = False
+  , ccDebugLog = True
+  , ccKeyLog = \msg -> appendFile "tls_key.log" (msg ++ "\n")
   }
 
 testClientConfigR :: ClientConfig
@@ -64,13 +71,20 @@ testClientConfigR = defaultClientConfig {
     ccPortName = "8002"
   , ccValidate = False
   , ccDebugLog = True
+  , ccQLog = Just "tmp/qlog/client/"
   }
 
 setServerQlog :: ServerConfig -> ServerConfig
-setServerQlog sc = sc
+setServerQlog sc = sc {
+    scDebugLog = Just "tmp/qlog/"
+  , scQLog = Just "tmp/qlog/"
+  }
 
 setClientQlog :: ClientConfig -> ClientConfig
-setClientQlog cc = cc
+setClientQlog cc = cc {
+    ccDebugLog = True
+  , ccQLog = Just "tmp/qlog/client/"
+  }
 
 data Scenario = Randomly Int
               | DropClientPacket [Int]
