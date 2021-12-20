@@ -145,10 +145,10 @@ library
   default-extensions:  Strict StrictData
   if os(windows)
     cc-options:        -D_WINDOWS
-  if arch(x86_64)
-    cpp-options:       -DUSE_FUSION
-    cc-options:        -mavx2 -maes -mpclmul
-    c-sources:         cbits/fusion.c cbits/picotls.c
+--  if arch(x86_64)
+--      cpp-options:       -DUSE_FUSION
+--      cc-options:        -mavx2 -maes -mpclmul
+--      c-sources:         cbits/fusion.c cbits/picotls.c
 
 test-suite spec
   Type:                 exitcode-stdio-1.0
