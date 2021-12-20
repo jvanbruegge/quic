@@ -35,8 +35,8 @@ udpServerConnectedSocket mysa peersa = E.bracketOnError open close $ \s -> do
     withFdSocket s setCloseOnExecIfNeeded
     -- bind and connect is not atomic
     -- So, bind may results in EADDRINUSE
-    bind s anysa      -- (UDP, *:13443, *:*)
-       `E.catch` postphone (bind s anysa)
+    bind s mysa      -- (UDP, *:13443, *:*)
+       `E.catch` postphone (bind s mysa)
     connect s peersa  -- (UDP, 127.0.0.1:13443, pa:pp)
     return s
   where
